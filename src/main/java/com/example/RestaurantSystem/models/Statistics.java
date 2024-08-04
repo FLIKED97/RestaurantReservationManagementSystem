@@ -32,5 +32,6 @@ public class Statistics {
     private int totalCancelled;
 
     @Column(name = "created_at")
-    private Timestamp createdAt;
+    @Temporal(TemporalType.TIMESTAMP)
+    private java.util.Date createdAt;
 }

@@ -1,11 +1,13 @@
 package com.example.RestaurantSystem.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -26,8 +28,10 @@ public class RestaurantTable {
     private int seats;
 
     @Column(name = "created_at")
-    private Timestamp createdAt;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
 
     @OneToMany(mappedBy = "table")
+    @JsonIgnore
     private List<Reservation> reservations;
 }
