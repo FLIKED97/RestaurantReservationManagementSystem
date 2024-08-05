@@ -23,12 +23,12 @@ public class ReservationDTO {
     private Timestamp createdAt;
 
 
-    private PersonDTO personDTO;
-
-    private RestaurantTable table;
-
-
-    private Food food;
+//    private PersonDTO personDTO;
+//
+//    private RestaurantTable table;
+//
+//
+//    private Food food;
 
     public enum Status {
         PENDING,
