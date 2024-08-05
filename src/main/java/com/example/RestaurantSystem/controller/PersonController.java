@@ -19,8 +19,5 @@ public class PersonController {
     public List<PersonDTO> getAllPerson(){
         return personService.getAllPerson();
     }
-    @PostMapping("/add")
-    public PersonDTO addPerson(@RequestBody PersonDTO personDTO) {
-        return personService.addPerson(personDTO);
-    }
+
 }
