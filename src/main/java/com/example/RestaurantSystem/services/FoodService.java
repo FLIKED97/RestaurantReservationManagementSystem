@@ -17,16 +17,23 @@ public class FoodService {
     private final FoodRepository foodRepository;
 
     private final ModelMapper modelMapper;
-    private FoodDTO convertToFoodDTO(Food food){
+
+    private FoodDTO convertToFoodDTO(Food food) {
         return modelMapper.map(food, FoodDTO.class);
     }
-    private Food convertToFood(FoodDTO foodDTO){
+
+    private Food convertToFood(FoodDTO foodDTO) {
         return modelMapper.map(foodDTO, Food.class);
     }
+
     public FoodDTO addFood(FoodDTO foodDTO) {
         Food food = convertToFood(foodDTO);
         food.setCreatedAt(new Date());
         Food savedFood = foodRepository.save(food);
         return convertToFoodDTO(savedFood);
+    }
+
+    public void deleteFood(int id) {
+        foodRepository.deleteById(id);
     }
 }
