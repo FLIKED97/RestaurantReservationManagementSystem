@@ -48,9 +48,14 @@ public class SecurityConfig {
                 // Налаштування доступу до кінцевих точок
                 .authorizeHttpRequests(request -> request
                         // Можна вказати конкретний шлях, * - 1 рівень вкладеності, ** - будь-яка кількість рівнів вкладеності
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/endpoint", "/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/auth/**")
+                        .permitAll()
+                        .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/v3/api-docs/**")
+                        .permitAll()
+                        .requestMatchers("/food/show")
+                        .permitAll() // Доступ для всіх
+                        .requestMatchers("/endpoint", "/admin/**", "/food/add", "/food/delete", "/person/show")
+                        .hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())

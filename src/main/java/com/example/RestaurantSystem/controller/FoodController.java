@@ -3,8 +3,9 @@ package com.example.RestaurantSystem.controller;
 import com.example.RestaurantSystem.dto.FoodDTO;
 import com.example.RestaurantSystem.services.FoodService;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -19,5 +20,10 @@ public class FoodController {
     @DeleteMapping("/delete/{id}")
     public void deleteFood(@PathVariable int id) {
         foodService.deleteFood(id);
+    }
+
+    @GetMapping("/show")
+    public List<FoodDTO> show(){
+        return foodService.getAllFood();
     }
 }
