@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TableRepository extends JpaRepository<RestaurantTable, Integer> {
+    RestaurantTable findByNumber(int number);
 }

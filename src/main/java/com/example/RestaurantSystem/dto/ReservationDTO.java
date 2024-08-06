@@ -1,7 +1,5 @@
 package com.example.RestaurantSystem.dto;
 
-import com.example.RestaurantSystem.models.Food;
-import com.example.RestaurantSystem.models.Person;
 import com.example.RestaurantSystem.models.Reservation;
 import com.example.RestaurantSystem.models.RestaurantTable;
 import jakarta.persistence.*;
@@ -11,6 +9,8 @@ import java.sql.Timestamp;
 
 @Data
 public class ReservationDTO {
+
+    private int id;
 
     private Timestamp reservationTime;
 
@@ -25,7 +25,7 @@ public class ReservationDTO {
 
 //    private PersonDTO personDTO;
 //
-//    private RestaurantTable table;
+    private RestaurantTable table;
 //
 //
 //    private Food food;
