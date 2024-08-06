@@ -6,12 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "Table")
+@Table(name = "restaurant_table")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,11 +26,11 @@ public class RestaurantTable {
     @Column(name = "seats")
     private int seats;
 
-    @Column(name = "created_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
+//    @Column(name = "created_at")
+//    @Temporal(TemporalType.TIMESTAMP)
+//    private Date createdAt;
 
-    @OneToMany(mappedBy = "table")
+    @OneToMany(mappedBy = "restaurantTable")
     @JsonIgnore
     private List<Reservation> reservations;
 }

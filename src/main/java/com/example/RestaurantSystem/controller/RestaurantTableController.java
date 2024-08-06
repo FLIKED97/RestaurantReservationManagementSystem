@@ -1,7 +1,7 @@
 package com.example.RestaurantSystem.controller;
 
 import com.example.RestaurantSystem.dto.RestaurantTableDTO;
-import com.example.RestaurantSystem.services.TableService;
+import com.example.RestaurantSystem.services.RestaurantTableService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +11,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @RequestMapping("/table")
 public class RestaurantTableController {
-    private final TableService tableService;
+    private final RestaurantTableService tableService;
 
     @PostMapping("/create")
     public Optional<RestaurantTableDTO> createTable(@RequestBody RestaurantTableDTO restaurantTableDTO) {

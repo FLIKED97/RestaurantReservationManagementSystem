@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@RestaurantTable(name = "Food")
+@Table(name = "Food")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
