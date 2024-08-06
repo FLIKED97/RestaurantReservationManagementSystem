@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@RestaurantTable(name = "Person")
+@Table(name = "Person")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

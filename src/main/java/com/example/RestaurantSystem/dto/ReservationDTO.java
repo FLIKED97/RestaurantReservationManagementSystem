@@ -1,6 +1,7 @@
 package com.example.RestaurantSystem.dto;
 
 import com.example.RestaurantSystem.models.Reservation;
+import com.example.RestaurantSystem.models.RestaurantTable;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -8,6 +9,8 @@ import java.sql.Timestamp;
 
 @Data
 public class ReservationDTO {
+
+    private int id;
 
     private Timestamp reservationTime;
 
@@ -20,9 +23,9 @@ public class ReservationDTO {
     private Timestamp createdAt;
 
 
-//    private PersonDTO personDTO;
+    //    private PersonDTO personDTO;
 //
-//    private RestaurantTable table;
+    private RestaurantTable table;
 //
 //
 //    private Food food;

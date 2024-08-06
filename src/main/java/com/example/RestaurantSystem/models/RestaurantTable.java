@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@jakarta.persistence.Table(name = "Table")
+@jakarta.persistence.Table(name = "restaurant_Table")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,7 +30,7 @@ public class RestaurantTable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
-    @OneToMany(mappedBy = "table")
+    @OneToMany(mappedBy = "restaurantTable")
     @JsonIgnore
     private List<Reservation> reservations;
 }
