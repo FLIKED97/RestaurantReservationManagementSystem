@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
-@Table(name = "Reservation")
+@jakarta.persistence.Table(name = "Reservation")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -44,7 +44,7 @@ public class Reservation {
     @JoinColumn(name = "table_id")
     @JsonIgnore
 
-    private RestaurantTable table;
+    private Table table;
 
     @ManyToOne
     @JoinColumn(name = "food_id")

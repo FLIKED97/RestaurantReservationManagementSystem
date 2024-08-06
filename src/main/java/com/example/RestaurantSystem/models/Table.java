@@ -6,16 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "Table")
+@jakarta.persistence.Table(name = "Table")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RestaurantTable {
+public class Table {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
