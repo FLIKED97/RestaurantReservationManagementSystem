@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
-@Table(name = "Reservation")
+@jakarta.persistence.Table(name = "Reservation")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

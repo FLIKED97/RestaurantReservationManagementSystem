@@ -1,7 +1,6 @@
 package com.example.RestaurantSystem.dto;
 
 import com.example.RestaurantSystem.models.Reservation;
-import com.example.RestaurantSystem.models.RestaurantTable;
 import jakarta.persistence.*;
 import lombok.Data;
 

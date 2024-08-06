@@ -18,7 +18,7 @@ public class PersonDTO {
 
     private String email;
 
-    private String role;
+//    private String role;
 
 //    private List<Reservation> reservations;
 }
