@@ -1,4 +1,4 @@
 package com.example.RestaurantSystem.dto;
 
-public class TableDTO {
+public class RestaurantTableDTO {
 }

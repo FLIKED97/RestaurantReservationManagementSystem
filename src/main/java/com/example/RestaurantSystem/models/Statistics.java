@@ -6,10 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 import java.sql.Date;
-import java.sql.Timestamp;
 
 @Entity
-@Table(name = "Statistics")
+@RestaurantTable(name = "Statistics")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

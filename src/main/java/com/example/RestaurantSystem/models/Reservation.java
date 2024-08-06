@@ -44,7 +44,7 @@ public class Reservation {
     @JoinColumn(name = "table_id")
     @JsonIgnore
 
-    private Table table;
+    private RestaurantTable table;
 
     @ManyToOne
     @JoinColumn(name = "food_id")
