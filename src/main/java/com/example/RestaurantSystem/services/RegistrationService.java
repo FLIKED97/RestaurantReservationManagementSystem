@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -22,5 +24,9 @@ public class RegistrationService {
         person.setRole("ROLE_USER");
         person.setCreatedAt(new Date());
         personRepository.save(person);
+    }
+    public List<String> getUserRoles(String email) {
+        Optional<Person> person = personRepository.findByEmail(email);
+        return List.of(person.get().getRole());
     }
 }

@@ -6,6 +6,7 @@ import com.example.RestaurantSystem.models.Reservation;
 import com.example.RestaurantSystem.models.RestaurantTable;
 import com.example.RestaurantSystem.repositories.RestaurantTableRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ import java.util.Date;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RestaurantTableService {
     private final RestaurantTableRepository restaurantTableRepository;
 

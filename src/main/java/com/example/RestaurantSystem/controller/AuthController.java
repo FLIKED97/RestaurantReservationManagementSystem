@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -43,8 +44,9 @@ public class AuthController {
         }
 
         registrationService.register(person);
-
-        String token = jwtUtil.generateToken(person.getEmail());
+        // Отримайте роль користувача після реєстрації
+        String role = person.getRole();
+        String token = jwtUtil.generateToken(person.getEmail(), List.of(role));
         return Map.of("jwt-token", token);
     }
 
@@ -60,9 +62,12 @@ public class AuthController {
             return Map.of("message", "Incorrect credentials!");
         }
 
-        String token = jwtUtil.generateToken(authenticationDTO.getEmail());
+        // Отримайте ролі користувача з вашого сервісу
+        List<String> roles = registrationService.getUserRoles(authenticationDTO.getEmail());
+        String token = jwtUtil.generateToken(authenticationDTO.getEmail(), roles);
         return Map.of("jwt-token", token);
     }
+
 
     public Person convertToPerson(PersonDTO personDTO) {
         return this.modelMapper.map(personDTO, Person.class);
