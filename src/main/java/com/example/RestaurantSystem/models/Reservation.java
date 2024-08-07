@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "Reservation")
@@ -24,8 +26,8 @@ public class Reservation {
     private Timestamp reservationTime;
 
 
-    @Column(name = "quantity")
-    private int quantity;
+//    @Column(name = "quantity")
+//    private int quantity;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
@@ -45,10 +47,8 @@ public class Reservation {
     @JsonIgnore
     private RestaurantTable restaurantTable;
 
-    @ManyToOne
-    @JoinColumn(name = "food_id")
-    @JsonIgnore
-    private Food food;
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL)
+    private List<ReservationFood> reservationFoods = new ArrayList<>();
 
     public enum Status {
         PENDING,

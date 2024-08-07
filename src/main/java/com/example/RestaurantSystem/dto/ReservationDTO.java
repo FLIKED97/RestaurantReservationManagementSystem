@@ -14,7 +14,7 @@ public class ReservationDTO {
 
     private Timestamp reservationTime;
 
-    private int quantity;
+//    private int quantity;
 
     @Enumerated(EnumType.STRING)
     private Reservation.Status status;
