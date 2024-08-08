@@ -28,8 +28,9 @@ public class ReservationController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteReservation(@PathVariable int id) {
-        reservationService.deleteReservation(id);
+    public ResponseEntity<Void> cancelReservation(@PathVariable int id) {
+        reservationService.cancelReservation(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/food")

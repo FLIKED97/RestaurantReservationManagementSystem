@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
 @Table(name = "Statistics")

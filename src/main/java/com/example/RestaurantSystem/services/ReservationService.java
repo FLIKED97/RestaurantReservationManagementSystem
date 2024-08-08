@@ -57,8 +57,16 @@ public class ReservationService {
         return Optional.empty();
     }
 
-    public void deleteReservation(int id) {
-        reservationRepository.deleteById(id);
+    public void cancelReservation(int id) {
+        Optional<Reservation> reservationOptional = reservationRepository.findById(id);
+
+        if (reservationOptional.isPresent()) {
+            Reservation reservation = reservationOptional.get();
+            reservation.setStatus(Reservation.Status.CANCELLED);
+            reservationRepository.save(reservation);
+        } else {
+            throw new NoSuchElementException("Reservation not found with id " + id);
+        }
     }
 
     public Optional<ReservationDTO> addFoodToReservation(AddFoodToReservationDTO addFoodDTO) {
