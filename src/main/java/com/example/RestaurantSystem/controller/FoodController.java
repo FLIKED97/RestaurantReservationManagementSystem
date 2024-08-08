@@ -13,11 +13,11 @@ import java.util.List;
 public class FoodController {
     private final FoodService foodService;
 
-    @PostMapping("/add")
+    @PostMapping("/admin/add")
     public FoodDTO getFood(@RequestBody FoodDTO foodDTO){
         return foodService.addFood(foodDTO);
     }
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/admin/delete/{id}")
     public void deleteFood(@PathVariable int id) {
         foodService.deleteFood(id);
     }

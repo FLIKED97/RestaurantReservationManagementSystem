@@ -15,7 +15,7 @@ public class PersonController {
     private final ModelMapper modelMapper;
     private final PersonService personService;
 
-    @GetMapping("/show")
+    @GetMapping("/admin/show")
     public List<PersonDTO> getAllPerson(){
         return personService.getAllPerson();
     }

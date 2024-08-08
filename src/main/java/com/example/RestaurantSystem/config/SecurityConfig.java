@@ -54,7 +54,7 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers("/food/show","/reservation/**")
                         .permitAll() // Доступ для всіх
-                        .requestMatchers("/endpoint", "/admin/**", "/food/add", "/food/delete", "/person/show","/table/**")
+                        .requestMatchers("/endpoint", "*/admin/**")
                         .hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
