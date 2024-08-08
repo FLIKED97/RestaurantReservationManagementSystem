@@ -1,7 +1,9 @@
 package com.example.RestaurantSystem.services;
 
+import com.example.RestaurantSystem.dto.PersonDTO;
 import com.example.RestaurantSystem.dto.ReservationDTO;
 import com.example.RestaurantSystem.dto.RestaurantTableDTO;
+import com.example.RestaurantSystem.models.Person;
 import com.example.RestaurantSystem.models.Reservation;
 import com.example.RestaurantSystem.models.RestaurantTable;
 import com.example.RestaurantSystem.repositories.RestaurantTableRepository;
@@ -11,7 +13,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -38,5 +42,17 @@ public class RestaurantTableService {
 
     public void deleteTable(int id) {
         restaurantTableRepository.deleteById(id);
+    }
+
+    public List<RestaurantTableDTO> getAllTable() {
+        return restaurantTableRepository.findAll().stream().map(this::convertToRestaurantTableDTO)
+                .collect(Collectors.toList());
+    }
+
+    private RestaurantTableDTO convertToRestaurantTableDTO(RestaurantTable restaurantTable){
+        return modelMapper.map(restaurantTable, RestaurantTableDTO.class);
+    }
+    private RestaurantTable convertToRestaurantTable(RestaurantTableDTO restaurantTableDTO){
+        return modelMapper.map(restaurantTableDTO, RestaurantTable.class);
     }
 }

@@ -52,7 +52,7 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/v3/api-docs/**")
                         .permitAll()
-                        .requestMatchers("/food/show","/reservation/**")
+                        .requestMatchers("*/user/**","/reservation/**")
                         .permitAll() // Доступ для всіх
                         .requestMatchers("/endpoint", "*/admin/**")
                         .hasRole("ADMIN")

@@ -22,7 +22,7 @@ public class FoodController {
         foodService.deleteFood(id);
     }
 
-    @GetMapping("/show")
+    @GetMapping("/user/show")
     public List<FoodDTO> show(){
         return foodService.getAllFood();
     }

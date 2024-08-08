@@ -5,6 +5,7 @@ import com.example.RestaurantSystem.services.RestaurantTableService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -26,5 +27,9 @@ public class RestaurantTableController {
     @DeleteMapping("/admin/delete/{id}")
     public void deleteTable(@PathVariable int id) {
         tableService.deleteTable(id);
+    }
+    @GetMapping("/user/show")
+    public List<RestaurantTableDTO> getAllTable(){
+        return tableService.getAllTable();
     }
 }
