@@ -1,7 +1,6 @@
 package com.example.RestaurantSystem.dto;
 
 import com.example.RestaurantSystem.models.Reservation;
-import com.example.RestaurantSystem.models.RestaurantTable;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -23,12 +22,11 @@ public class ReservationDTO {
     private Timestamp createdAt;
 
 
-    //    private PersonDTO personDTO;
-//
-    private RestaurantTable table;
-//
-//
-//    private Food food;
+//    private PersonDTO personDTO;
+
+    private RestaurantTableDTO table;
+
+//    private FoodDTO food;
 
     public enum Status {
         PENDING,

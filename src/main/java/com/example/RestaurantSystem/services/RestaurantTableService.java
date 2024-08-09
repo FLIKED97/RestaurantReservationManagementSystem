@@ -1,18 +1,13 @@
 package com.example.RestaurantSystem.services;
 
-import com.example.RestaurantSystem.dto.PersonDTO;
-import com.example.RestaurantSystem.dto.ReservationDTO;
+
 import com.example.RestaurantSystem.dto.RestaurantTableDTO;
-import com.example.RestaurantSystem.models.Person;
-import com.example.RestaurantSystem.models.Reservation;
 import com.example.RestaurantSystem.models.RestaurantTable;
 import com.example.RestaurantSystem.repositories.RestaurantTableRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,6 +18,14 @@ public class RestaurantTableService {
     private final RestaurantTableRepository restaurantTableRepository;
 
     private final ModelMapper modelMapper;
+
+    public Optional<List<RestaurantTableDTO>> getAllRestaurantTables() {
+        List<RestaurantTable> restaurantTables = restaurantTableRepository.findAll();
+        return Optional.ofNullable(restaurantTables)
+                .map(tables -> tables.stream()
+                        .map(table -> modelMapper.map(table, RestaurantTableDTO.class))
+                        .collect(Collectors.toList()));
+    }
 
     public Optional<RestaurantTableDTO> createTable(RestaurantTableDTO restaurantTableDTO) {
         return Optional.ofNullable(modelMapper.map(restaurantTableDTO, RestaurantTable.class))

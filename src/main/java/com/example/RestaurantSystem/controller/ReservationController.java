@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -16,6 +17,10 @@ import java.util.Optional;
 public class ReservationController {
     private final ReservationService reservationService;
 
+    @GetMapping("/getAll")
+    public Optional<List<ReservationDTO>> getAllReservations() {
+        return reservationService.getAllReservations();
+    }
 
     @PostMapping("/create")
     public Optional<ReservationDTO> createReservation(@RequestBody ReservationDTO reservationDTO) {

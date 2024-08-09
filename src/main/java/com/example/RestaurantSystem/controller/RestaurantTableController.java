@@ -10,21 +10,26 @@ import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/table")
+@RequestMapping("admin/table")
 public class RestaurantTableController {
     private final RestaurantTableService tableService;
 
-    @PostMapping("/admin/create")
+    @GetMapping("/tables")
+    public Optional<List<RestaurantTableDTO>> getAllTables() {
+        return tableService.getAllRestaurantTables();
+    }
+
+    @PostMapping("/create")
     public Optional<RestaurantTableDTO> createTable(@RequestBody RestaurantTableDTO restaurantTableDTO) {
         return tableService.createTable(restaurantTableDTO);
     }
 
-    @PutMapping("/admin/update")
+    @PutMapping("/update")
     public Optional<RestaurantTableDTO> updateTable(@RequestBody RestaurantTableDTO restaurantTableDTO) {
         return tableService.changeTable(restaurantTableDTO);
     }
 
-    @DeleteMapping("/admin/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteTable(@PathVariable int id) {
         tableService.deleteTable(id);
     }

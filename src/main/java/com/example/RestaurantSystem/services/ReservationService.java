@@ -29,6 +29,13 @@ public class ReservationService {
 
     private final ReservationFoodRepository reservationFoodRepository;
 
+    public Optional<List<ReservationDTO>> getAllReservations() {
+        List<Reservation> reservations = reservationRepository.findAll();
+        return Optional.of(reservations.stream()
+                .map(reservation -> modelMapper.map(reservation, ReservationDTO.class))
+                .collect(Collectors.toList()));
+    }
+
     public Optional<ReservationDTO> createReservation(ReservationDTO reservationDTO) {
 
         Optional<Reservation> reservationOptional = Optional.ofNullable(modelMapper.map(reservationDTO, Reservation.class));
