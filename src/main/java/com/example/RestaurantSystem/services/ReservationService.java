@@ -4,6 +4,7 @@ import com.example.RestaurantSystem.dto.AddFoodToReservationDTO;
 import com.example.RestaurantSystem.dto.ReservationDTO;
 import com.example.RestaurantSystem.models.Reservation;
 import com.example.RestaurantSystem.models.ReservationFood;
+import com.example.RestaurantSystem.models.RestaurantTable;
 import com.example.RestaurantSystem.repositories.*;
 import com.example.RestaurantSystem.security.PersonDetails;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,13 @@ public class ReservationService {
 
     private final ReservationFoodRepository reservationFoodRepository;
 
+    public Optional<List<ReservationDTO>> getAllReservations() {
+        List<Reservation> reservations = reservationRepository.findAll();
+        return Optional.of(reservations.stream()
+                .map(reservation -> modelMapper.map(reservation, ReservationDTO.class))
+                .collect(Collectors.toList()));
+    }
+
     public Optional<ReservationDTO> createReservation(ReservationDTO reservationDTO) {
 
         Optional<Reservation> reservationOptional = Optional.ofNullable(modelMapper.map(reservationDTO, Reservation.class));
@@ -38,6 +46,8 @@ public class ReservationService {
             Reservation reservation = reservationOptional.get();
             reservation.setCreatedAt(new Date());
             reservation.setPerson(personDetails.getPerson());
+            RestaurantTable restaurantTable = tableRepository.findByNumber(reservation.getRestaurantTable().getNumber());
+            reservation.setRestaurantTable(restaurantTable);
             reservationRepository.save(reservation);
             return Optional.ofNullable(modelMapper.map(reservation, ReservationDTO.class));
         }

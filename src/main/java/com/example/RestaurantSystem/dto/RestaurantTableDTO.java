@@ -13,5 +13,5 @@ public class RestaurantTableDTO {
 
     private int seats;
     @JsonIgnore
-    private List<Reservation> reservations;
+    private List<ReservationDTO> reservations;
 }
