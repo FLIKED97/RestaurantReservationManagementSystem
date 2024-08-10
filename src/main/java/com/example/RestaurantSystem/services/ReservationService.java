@@ -43,6 +43,7 @@ public class ReservationService {
         if (reservationOptional.isPresent()) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
+
             Reservation reservation = reservationOptional.get();
             reservation.setCreatedAt(new Date());
             reservation.setPerson(personDetails.getPerson());

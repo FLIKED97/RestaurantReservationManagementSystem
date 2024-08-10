@@ -13,20 +13,14 @@ public class ReservationDTO {
 
     private Timestamp reservationTime;
 
-//    private int quantity;
-
     @Enumerated(EnumType.STRING)
     private Reservation.Status status;
-
 
     private Timestamp createdAt;
 
 
-//    private PersonDTO personDTO;
-
     private RestaurantTableDTO table;
 
-//    private FoodDTO food;
 
     public enum Status {
         PENDING,
