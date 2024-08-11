@@ -19,5 +19,8 @@ public class PersonController {
     public List<PersonDTO> getAllPerson(){
         return personService.getAllPerson();
     }
-
+    @GetMapping("/admin/block_user/{email}")
+    public void blockUser(@PathVariable String email){
+        personService.blockUser(email);
+    }
 }

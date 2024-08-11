@@ -14,10 +14,10 @@ import java.util.Optional;
 public class RestaurantTableController {
     private final RestaurantTableService tableService;
 
-    @GetMapping("/tables")
-    public Optional<List<RestaurantTableDTO>> getAllTables() {
-        return tableService.getAllRestaurantTables();
-    }
+//    @GetMapping("/tables")
+//    public Optional<List<RestaurantTableDTO>> getAllTables() {
+//        return tableService.getAllRestaurantTables();
+//    }
 
     @PostMapping("/create")
     public Optional<RestaurantTableDTO> createTable(@RequestBody RestaurantTableDTO restaurantTableDTO) {

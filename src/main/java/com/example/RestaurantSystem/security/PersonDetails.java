@@ -36,7 +36,7 @@ public class PersonDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
+        return this.person.isAccountNonLocked();
     }
 
     @Override
@@ -46,7 +46,7 @@ public class PersonDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return this.person.isEnabled();
     }
 
     public Person getPerson() {

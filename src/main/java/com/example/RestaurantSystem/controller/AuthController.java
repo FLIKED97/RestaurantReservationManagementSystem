@@ -5,6 +5,7 @@ import com.example.RestaurantSystem.dto.PersonDTO;
 import com.example.RestaurantSystem.models.Person;
 import com.example.RestaurantSystem.security.JWTUtil;
 import com.example.RestaurantSystem.services.RegistrationService;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;

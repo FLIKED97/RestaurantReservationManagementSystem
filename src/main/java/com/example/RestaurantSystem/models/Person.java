@@ -35,6 +35,11 @@ public class Person {
     @Column(name = "role")
     private String role;
 
+    @Column(name = "account_non_locked")
+    private boolean accountNonLocked = true;
+    @Column(name = "enabled")
+    private boolean enabled = true;
+
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;

@@ -5,11 +5,13 @@ import com.example.RestaurantSystem.models.Person;
 import com.example.RestaurantSystem.repositories.PersonRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,4 +38,48 @@ public class PersonService {
 //        Person savedPerson = personRepository.save(person);
 //        return convertToPersonDTO(savedPerson);
 //    }
+
+    public void blockUser(String email) {
+        Optional<Person> personOptional = personRepository.findByEmail(email);
+        if (personOptional.isPresent()) {
+            Person person = personOptional.get();
+            person.setAccountNonLocked(false);
+            personRepository.save(person);
+        } else {
+            throw new UsernameNotFoundException("User not found with email: " + email);
+        }
+    }
+
+    public void unblockUser(String email) {
+        Optional<Person> personOptional = personRepository.findByEmail(email);
+        if (personOptional.isPresent()) {
+            Person person = personOptional.get();
+            person.setAccountNonLocked(true);
+            personRepository.save(person);
+        } else {
+            throw new UsernameNotFoundException("User not found with email: " + email);
+        }
+    }
+
+    public void enableUser(String email) {
+        Optional<Person> personOptional = personRepository.findByEmail(email);
+        if (personOptional.isPresent()) {
+            Person person = personOptional.get();
+            person.setEnabled(true);
+            personRepository.save(person);
+        } else {
+            throw new UsernameNotFoundException("User not found with email: " + email);
+        }
+    }
+
+    public void disableUser(String email) {
+        Optional<Person> personOptional = personRepository.findByEmail(email);
+        if (personOptional.isPresent()) {
+            Person person = personOptional.get();
+            person.setEnabled(false);
+            personRepository.save(person);
+        } else {
+            throw new UsernameNotFoundException("User not found with email: " + email);
+        }
+    }
 }
