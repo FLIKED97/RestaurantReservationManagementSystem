@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("admin/table")
+@RequestMapping("/table")
 public class RestaurantTableController {
     private final RestaurantTableService tableService;
 
@@ -19,17 +19,17 @@ public class RestaurantTableController {
 //        return tableService.getAllRestaurantTables();
 //    }
 
-    @PostMapping("/create")
+    @PostMapping("/admin/create")
     public Optional<RestaurantTableDTO> createTable(@RequestBody RestaurantTableDTO restaurantTableDTO) {
         return tableService.createTable(restaurantTableDTO);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/admin/update")
     public Optional<RestaurantTableDTO> updateTable(@RequestBody RestaurantTableDTO restaurantTableDTO) {
         return tableService.changeTable(restaurantTableDTO);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/admin/delete/{id}")
     public void deleteTable(@PathVariable int id) {
         tableService.deleteTable(id);
     }
