@@ -32,6 +32,13 @@ public class ReservationController {
         return reservationService.changeReservation(reservationDTO);
     }
 
+    @PutMapping("/confirm/{id}")
+    public ResponseEntity<ReservationDTO> confirmReservation(@PathVariable int id) {
+        reservationService.confirmReservation(id);
+        return ResponseEntity.ok().build();
+    }
+
+    //Думаю тут ліпше підійде putMapping бо по факту ми не видаляємо повністю а просто змінюємо статус хотя не впевнений
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> cancelReservation(@PathVariable int id) {
         reservationService.cancelReservation(id);

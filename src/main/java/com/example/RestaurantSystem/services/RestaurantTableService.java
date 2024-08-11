@@ -19,13 +19,13 @@ public class RestaurantTableService {
 
     private final ModelMapper modelMapper;
 
-    public Optional<List<RestaurantTableDTO>> getAllRestaurantTables() {
-        List<RestaurantTable> restaurantTables = restaurantTableRepository.findAll();
-        return Optional.ofNullable(restaurantTables)
-                .map(tables -> tables.stream()
-                        .map(table -> modelMapper.map(table, RestaurantTableDTO.class))
-                        .collect(Collectors.toList()));
-    }
+//    public Optional<List<RestaurantTableDTO>> getAllTables() {
+//        List<RestaurantTable> restaurantTables = restaurantTableRepository.findAll();
+//        return Optional.ofNullable(restaurantTables)
+//                .map(tables -> tables.stream()
+//                        .map(table -> modelMapper.map(table, RestaurantTableDTO.class))
+//                        .collect(Collectors.toList()));
+//    }
 
     public Optional<RestaurantTableDTO> createTable(RestaurantTableDTO restaurantTableDTO) {
         return Optional.ofNullable(modelMapper.map(restaurantTableDTO, RestaurantTable.class))

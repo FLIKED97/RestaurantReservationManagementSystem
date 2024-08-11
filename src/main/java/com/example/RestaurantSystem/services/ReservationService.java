@@ -9,6 +9,7 @@ import com.example.RestaurantSystem.repositories.*;
 import com.example.RestaurantSystem.security.PersonDetails;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -27,8 +28,8 @@ public class ReservationService {
     private final PersonRepository personRepository;
     private final RestaurantTableRepository tableRepository;
     private final ModelMapper modelMapper;
-
     private final ReservationFoodRepository reservationFoodRepository;
+    private final EmailService emailService;
 
     public Optional<List<ReservationDTO>> getAllReservations() {
         List<Reservation> reservations = reservationRepository.findAll();
@@ -71,10 +72,39 @@ public class ReservationService {
     public void cancelReservation(int id) {
         Optional<Reservation> reservationOptional = reservationRepository.findById(id);
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
+
         if (reservationOptional.isPresent()) {
             Reservation reservation = reservationOptional.get();
-            reservation.setStatus(Reservation.Status.CANCELLED);
-            reservationRepository.save(reservation);
+            if (reservation.getPerson().getId() == personDetails.getPerson().getId()) {
+                reservation.setStatus(Reservation.Status.CANCELLED);
+                reservationRepository.save(reservation);
+
+                emailService.sendSimpleMessage(personDetails.getPerson().getEmail(), "Restaurant System", "Ваше бронювання було відмінено");
+            }  else {
+                throw new AccessDeniedException("Access denied. You cannot cancel reservations you did not create.");
+            }
+        } else {
+            throw new NoSuchElementException("Reservation not found with id " + id);
+        }
+    }
+
+    public void confirmReservation(int id) {
+        Optional<Reservation> reservationOptional = reservationRepository.findById(id);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
+
+        if (reservationOptional.isPresent()) {
+            Reservation reservation = reservationOptional.get();
+            if (reservation.getPerson().getId() == personDetails.getPerson().getId()) {
+                reservation.setStatus(Reservation.Status.CONFIRMED);
+                reservationRepository.save(reservation);
+                emailService.sendSimpleMessage(personDetails.getPerson().getEmail(), "Restaurant System", "Ваше бронювання було підтверджено");
+            } else {
+                throw new AccessDeniedException("Access denied. You cannot confirm reservations you did not create.");
+            }
         } else {
             throw new NoSuchElementException("Reservation not found with id " + id);
         }
