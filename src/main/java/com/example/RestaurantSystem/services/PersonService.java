@@ -82,4 +82,26 @@ public class PersonService {
             throw new UsernameNotFoundException("User not found with email: " + email);
         }
     }
+
+    public void setAdmin(String email) {
+        Optional<Person> personOptional = personRepository.findByEmail(email);
+        if (personOptional.isPresent()) {
+            Person person = personOptional.get();
+            person.setRole("ROLE_ADMIN");
+            personRepository.save(person);
+        } else {
+            throw new UsernameNotFoundException("User not found with email: " + email);
+        }
+    }
+
+    public void setUser(String email) {
+        Optional<Person> personOptional = personRepository.findByEmail(email);
+        if (personOptional.isPresent()) {
+            Person person = personOptional.get();
+            person.setRole("ROLE_USER");
+            personRepository.save(person);
+        } else {
+            throw new UsernameNotFoundException("User not found with email: " + email);
+        }
+    }
 }

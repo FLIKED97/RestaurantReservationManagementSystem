@@ -5,10 +5,13 @@ import com.example.RestaurantSystem.dto.PersonDTO;
 import com.example.RestaurantSystem.models.Person;
 import com.example.RestaurantSystem.security.JWTUtil;
 import com.example.RestaurantSystem.services.RegistrationService;
+import com.example.RestaurantSystem.util.PersonValidator;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/auth")
@@ -33,23 +37,42 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
 
-    @PostMapping("/registration")
-    public Map<String, String> performRegistration(@RequestBody @Valid PersonDTO personDTO,
-                                                   BindingResult bindingResult) {
-        Person person = convertToPerson(personDTO);
+    private final PersonValidator personValidator;
 
-        //personValidator.validate(person, bindingResult); TODO
+    @PostMapping("/registration")
+    public ResponseEntity<Map<String, Object>> performRegistration(
+            @RequestBody @Valid PersonDTO personDTO,
+            BindingResult bindingResult) {
+
+        Person person = convertToPerson(personDTO);
+        personValidator.validate(person, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return Map.of("message", "Помилка!");
+            return createErrorResponse(bindingResult);
         }
 
         registrationService.register(person);
-        // Отримайте роль користувача після реєстрації
-        String role = person.getRole();
-        String token = jwtUtil.generateToken(person.getEmail(), List.of(role));
-        return Map.of("jwt-token", token);
+
+        String token = jwtUtil.generateToken(person.getEmail(), List.of(person.getRole()));
+
+        Map<String, Object> response = Map.of("jwt-token", token);
+
+        return ResponseEntity.ok(response);
     }
+
+    private ResponseEntity<Map<String, Object>> createErrorResponse(BindingResult bindingResult) {
+        List<String> errorMessages = bindingResult.getAllErrors().stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.toList());
+
+        Map<String, Object> response = Map.of(
+                "message", "Виникли помилки при реєстрації",
+                "errors", errorMessages
+        );
+
+        return ResponseEntity.badRequest().body(response);
+    }
+
 
     @PostMapping("/login")
     public Map<String, String> performLogin(@RequestBody AuthenticationDTO authenticationDTO) {

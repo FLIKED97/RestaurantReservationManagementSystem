@@ -27,4 +27,12 @@ public class PersonController {
     public void unBlockUser(@PathVariable String email){
         personService.unblockUser(email);
     }
+    @PutMapping("/admin/set_user/{email}")
+    public void setUser(@PathVariable String email){
+        personService.setUser(email);
+    }
+    @PutMapping("/admin/set_admin/{email}")
+    public void setAdmin(@PathVariable String email){
+        personService.setAdmin(email);
+    }
 }
