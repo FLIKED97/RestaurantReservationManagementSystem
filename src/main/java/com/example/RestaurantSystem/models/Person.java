@@ -2,9 +2,7 @@ package com.example.RestaurantSystem.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -24,9 +22,13 @@ public class Person {
     private int id;
 
     @Column(name = "first_name")
+    @NotEmpty(message = "The First Name must not be blank")
+    @Size(min = 2, max = 100, message = "The First Name should be between 2 and 100 characters long")
     private String firstName;
 
     @Column(name = "last_name")
+    @NotEmpty(message = "The Last Name must not be blank")
+    @Size(min = 2, max = 100, message = "The Last Name should be between 2 and 100 characters long")
     private String lastName;
 
     @Column(name = "email", unique = true, nullable = false)

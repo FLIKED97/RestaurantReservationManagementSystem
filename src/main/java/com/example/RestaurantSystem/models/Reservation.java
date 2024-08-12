@@ -2,6 +2,7 @@ package com.example.RestaurantSystem.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.PastOrPresent;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ public class Reservation {
     private int id;
 
     @Column(name = "reservation_time")
+    @PastOrPresent(message = "The reservation time date cannot be in the future")
     private Timestamp reservationTime;
 
 
