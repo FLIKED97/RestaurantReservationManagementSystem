@@ -45,6 +45,7 @@ public class Person {
 
     @Column(name = "account_non_locked")
     private boolean accountNonLocked = true;
+
     @Column(name = "enabled")
     private boolean enabled = true;
 

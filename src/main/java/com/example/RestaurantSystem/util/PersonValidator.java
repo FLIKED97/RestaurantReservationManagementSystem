@@ -28,12 +28,23 @@ public class PersonValidator implements Validator {
     public void validate(Object o, Errors errors) {
         Person person = (Person) o;
 
+        // Перевірка наявності користувача з таким самим email
         try {
             personDetailsService.loadUserByUsername(person.getEmail());
+            // Якщо користувач знайдений, кидаємо помилку
+            errors.rejectValue("email", "", "A person with this email already exists");
         } catch (UsernameNotFoundException ignored) {
-            return; // все ок, користувач не знайдений
+            // все ок, користувач не знайдений, нічого не робимо
         }
 
-        errors.rejectValue("email", "", "A person with this username already exists");
+        // Додаткова перевірка: ім'я не повинно містити цифр
+        if (person.getFirstName().matches(".*\\d.*")) {
+            errors.rejectValue("FirstName", "", "FirstName should not contain numbers");
+        }
+        // Додаткова перевірка: ім'я не повинно містити цифр
+        if (person.getLastName().matches(".*\\d.*")) {
+            errors.rejectValue("LastName", "", "LastName should not contain numbers");
+        }
     }
+
 }
