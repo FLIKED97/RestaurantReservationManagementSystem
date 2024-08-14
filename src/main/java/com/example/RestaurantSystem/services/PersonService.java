@@ -3,6 +3,7 @@ package com.example.RestaurantSystem.services;
 import com.example.RestaurantSystem.dto.PersonDTO;
 import com.example.RestaurantSystem.models.Person;
 import com.example.RestaurantSystem.repositories.PersonRepository;
+import com.example.RestaurantSystem.util.PersonNotFoundException;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -40,68 +41,45 @@ public class PersonService {
 //    }
 
     public void blockUser(String email) {
-        Optional<Person> personOptional = personRepository.findByEmail(email);
-        if (personOptional.isPresent()) {
-            Person person = personOptional.get();
-            person.setAccountNonLocked(false);
-            personRepository.save(person);
-        } else {
-            throw new UsernameNotFoundException("User not found with email: " + email);
-        }
+        Person person = personRepository.findByEmail(email)
+                .orElseThrow(() -> new PersonNotFoundException("User with email " + email + " not found"));
+        person.setAccountNonLocked(false);
+        personRepository.save(person);
     }
 
+
     public void unblockUser(String email) {
-        Optional<Person> personOptional = personRepository.findByEmail(email);
-        if (personOptional.isPresent()) {
-            Person person = personOptional.get();
-            person.setAccountNonLocked(true);
-            personRepository.save(person);
-        } else {
-            throw new UsernameNotFoundException("User not found with email: " + email);
-        }
+        Person person = personRepository.findByEmail(email)
+                .orElseThrow(() -> new PersonNotFoundException("User with email " + email + " not found"));
+        person.setAccountNonLocked(true);
+        personRepository.save(person);
     }
 
     public void enableUser(String email) {
-        Optional<Person> personOptional = personRepository.findByEmail(email);
-        if (personOptional.isPresent()) {
-            Person person = personOptional.get();
-            person.setEnabled(true);
-            personRepository.save(person);
-        } else {
-            throw new UsernameNotFoundException("User not found with email: " + email);
-        }
+        Person person = personRepository.findByEmail(email)
+                .orElseThrow(() -> new PersonNotFoundException("User with email " + email + " not found"));
+        person.setEnabled(true);
+        personRepository.save(person);
     }
 
     public void disableUser(String email) {
-        Optional<Person> personOptional = personRepository.findByEmail(email);
-        if (personOptional.isPresent()) {
-            Person person = personOptional.get();
-            person.setEnabled(false);
-            personRepository.save(person);
-        } else {
-            throw new UsernameNotFoundException("User not found with email: " + email);
-        }
+        Person person = personRepository.findByEmail(email)
+                .orElseThrow(() -> new PersonNotFoundException("User with email " + email + " not found"));
+        person.setEnabled(false);
+        personRepository.save(person);
     }
 
     public void setAdmin(String email) {
-        Optional<Person> personOptional = personRepository.findByEmail(email);
-        if (personOptional.isPresent()) {
-            Person person = personOptional.get();
-            person.setRole("ROLE_ADMIN");
-            personRepository.save(person);
-        } else {
-            throw new UsernameNotFoundException("User not found with email: " + email);
-        }
+        Person person = personRepository.findByEmail(email)
+                .orElseThrow(() -> new PersonNotFoundException("User with email " + email + " not found"));
+        person.setRole("ROLE_ADMIN");
+        personRepository.save(person);
     }
 
     public void setUser(String email) {
-        Optional<Person> personOptional = personRepository.findByEmail(email);
-        if (personOptional.isPresent()) {
-            Person person = personOptional.get();
-            person.setRole("ROLE_USER");
-            personRepository.save(person);
-        } else {
-            throw new UsernameNotFoundException("User not found with email: " + email);
-        }
+        Person person = personRepository.findByEmail(email)
+                .orElseThrow(() -> new PersonNotFoundException("User with email " + email + " not found"));
+        person.setRole("ROLE_USER");
+        personRepository.save(person);
     }
 }

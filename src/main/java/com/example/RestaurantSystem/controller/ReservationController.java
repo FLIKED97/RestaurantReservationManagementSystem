@@ -3,6 +3,7 @@ package com.example.RestaurantSystem.controller;
 import com.example.RestaurantSystem.dto.AddFoodToReservationDTO;
 import com.example.RestaurantSystem.dto.ReservationDTO;
 import com.example.RestaurantSystem.services.ReservationService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class ReservationController {
     }
 
     @PostMapping("/create")
-    public Optional<ReservationDTO> createReservation(@RequestBody ReservationDTO reservationDTO) {
+    public Optional<ReservationDTO> createReservation(@RequestBody @Valid ReservationDTO reservationDTO) {
         return reservationService.createReservation(reservationDTO);
     }
 

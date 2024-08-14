@@ -3,6 +3,7 @@ package com.example.RestaurantSystem.services;
 import com.example.RestaurantSystem.dto.FoodDTO;
 import com.example.RestaurantSystem.models.Food;
 import com.example.RestaurantSystem.repositories.FoodRepository;
+import com.example.RestaurantSystem.util.FoodNotFoundException;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -34,8 +35,14 @@ public class FoodService {
     }
 
     public void deleteFood(int id) {
-        foodRepository.deleteById(id);
+        if (foodRepository.existsById(id)) {
+            foodRepository.deleteById(id);
+        } else {
+            throw new FoodNotFoundException("Food with id " + id + " not found");
+        }
     }
+
+
     public List<FoodDTO> getAllFood() {
         return foodRepository.findAll().stream().map(this::convertToFoodDTO)
                 .collect(Collectors.toList());

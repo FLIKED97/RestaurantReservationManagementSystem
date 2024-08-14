@@ -40,10 +40,8 @@ public class AuthController {
     private final PersonValidator personValidator;
 
     @PostMapping("/registration")
-    public ResponseEntity<Map<String, Object>> performRegistration(
-            @RequestBody @Valid PersonDTO personDTO,
-            BindingResult bindingResult) {
-
+    public ResponseEntity<Map<String, Object>> performRegistration(@RequestBody @Valid PersonDTO personDTO,
+                                                                    BindingResult bindingResult) {
         Person person = convertToPerson(personDTO);
         personValidator.validate(person, bindingResult);
 
