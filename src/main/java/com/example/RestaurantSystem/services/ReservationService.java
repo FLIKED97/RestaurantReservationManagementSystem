@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -29,7 +28,6 @@ import java.util.stream.Collectors;
 public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final FoodRepository foodRepository;
-    private final PersonRepository personRepository;
     private final RestaurantTableRepository tableRepository;
     private final ModelMapper modelMapper;
     private final ReservationFoodRepository reservationFoodRepository;

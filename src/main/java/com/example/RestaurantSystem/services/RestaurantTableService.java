@@ -26,20 +26,24 @@ public class RestaurantTableService {
                 .map(savedTable -> modelMapper.map(savedTable, RestaurantTableDTO.class));
     }
 
-    public Optional<RestaurantTableDTO> changeTable(RestaurantTableDTO restaurantTableDTO) {
-        Optional<RestaurantTable> restaurantTableOptional = Optional.ofNullable(restaurantTableRepository.findByNumber(restaurantTableDTO.getNumber()))
+    public RestaurantTableDTO changeTable(RestaurantTableDTO restaurantTableDTO) {
+        RestaurantTable foundRestaurantTable = restaurantTableRepository.findByNumber(restaurantTableDTO.getNumber())
                 .orElseThrow(()-> new TableNotFoundException("Table with number " + restaurantTableDTO.getNumber() + " not found"));
-        if (restaurantTableOptional.isPresent()) {
-            RestaurantTable foundRestaurantTable = restaurantTableOptional.get();
+
+
             RestaurantTable updateRestaurantTable = restaurantTableRepository.save(foundRestaurantTable);
-            return Optional.ofNullable(modelMapper.map(updateRestaurantTable, RestaurantTableDTO.class));
-        }
-        return Optional.empty();
+
+            return modelMapper.map(updateRestaurantTable, RestaurantTableDTO.class);
+
     }
 
     public void deleteTable(int id) {
+        if (!restaurantTableRepository.existsById(id)) {
+            throw new TableNotFoundException("Table with id " + id + " not found.");
+        }
         restaurantTableRepository.deleteById(id);
     }
+
 
     public List<RestaurantTableDTO> getAllTable() {
         return restaurantTableRepository.findAll().stream().map(this::convertToRestaurantTableDTO)
