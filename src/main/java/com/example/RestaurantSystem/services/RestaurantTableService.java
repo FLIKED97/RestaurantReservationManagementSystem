@@ -4,6 +4,7 @@ package com.example.RestaurantSystem.services;
 import com.example.RestaurantSystem.dto.RestaurantTableDTO;
 import com.example.RestaurantSystem.models.RestaurantTable;
 import com.example.RestaurantSystem.repositories.RestaurantTableRepository;
+import com.example.RestaurantSystem.util.TableNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -19,14 +20,6 @@ public class RestaurantTableService {
 
     private final ModelMapper modelMapper;
 
-//    public Optional<List<RestaurantTableDTO>> getAllTables() {
-//        List<RestaurantTable> restaurantTables = restaurantTableRepository.findAll();
-//        return Optional.ofNullable(restaurantTables)
-//                .map(tables -> tables.stream()
-//                        .map(table -> modelMapper.map(table, RestaurantTableDTO.class))
-//                        .collect(Collectors.toList()));
-//    }
-
     public Optional<RestaurantTableDTO> createTable(RestaurantTableDTO restaurantTableDTO) {
         return Optional.ofNullable(modelMapper.map(restaurantTableDTO, RestaurantTable.class))
                 .map(restaurantTableRepository::save)
@@ -34,7 +27,8 @@ public class RestaurantTableService {
     }
 
     public Optional<RestaurantTableDTO> changeTable(RestaurantTableDTO restaurantTableDTO) {
-        Optional<RestaurantTable> restaurantTableOptional = Optional.ofNullable(restaurantTableRepository.findByNumber(restaurantTableDTO.getNumber()));
+        Optional<RestaurantTable> restaurantTableOptional = Optional.ofNullable(restaurantTableRepository.findByNumber(restaurantTableDTO.getNumber()))
+                .orElseThrow(()-> new TableNotFoundException("Table with number " + restaurantTableDTO.getNumber() + " not found"));
         if (restaurantTableOptional.isPresent()) {
             RestaurantTable foundRestaurantTable = restaurantTableOptional.get();
             RestaurantTable updateRestaurantTable = restaurantTableRepository.save(foundRestaurantTable);

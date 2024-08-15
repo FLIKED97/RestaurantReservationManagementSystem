@@ -5,12 +5,15 @@ import com.example.RestaurantSystem.dto.ReservationDTO;
 import com.example.RestaurantSystem.services.ReservationService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @AllArgsConstructor
@@ -24,14 +27,35 @@ public class ReservationController {
     }
 
     @PostMapping("/create")
-    public Optional<ReservationDTO> createReservation(@RequestBody @Valid ReservationDTO reservationDTO) {
-        return reservationService.createReservation(reservationDTO);
+    public ResponseEntity<?> createReservation(@RequestBody @Valid ReservationDTO reservationDTO,
+                                               BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<String> errorMessages = bindingResult.getAllErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errorMessages);
+        }
+
+        ReservationDTO createdReservation = reservationService.createReservation(reservationDTO);
+
+        return ResponseEntity.ok(createdReservation);
     }
 
+
     @PutMapping("/update")
-    public Optional<ReservationDTO> updateReservation(@RequestBody ReservationDTO reservationDTO) {
-        return reservationService.changeReservation(reservationDTO);
+    public ResponseEntity<?> updateReservation(@RequestBody @Valid ReservationDTO reservationDTO,
+                                               BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<String> errorMessages = bindingResult.getAllErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errorMessages);
+        }
+        ReservationDTO updatedReservationDTO = reservationService.changeReservation(reservationDTO);
+
+        return ResponseEntity.ok(updatedReservationDTO);
     }
+
 
     @PutMapping("/confirm/{id}")
     public ResponseEntity<ReservationDTO> confirmReservation(@PathVariable int id) {
@@ -39,15 +63,21 @@ public class ReservationController {
         return ResponseEntity.ok().build();
     }
 
-    //Думаю тут ліпше підійде putMapping бо по факту ми не видаляємо повністю а просто змінюємо статус хотя не впевнений
-    @DeleteMapping("/delete/{id}")
+    @PutMapping("/delete/{id}")
     public ResponseEntity<Void> cancelReservation(@PathVariable int id) {
         reservationService.cancelReservation(id);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/food")
-    public ResponseEntity<ReservationDTO> addFoodToReservation(@RequestBody AddFoodToReservationDTO addFoodDTO) {
+    public ResponseEntity<?> addFoodToReservation(@RequestBody @Valid AddFoodToReservationDTO addFoodDTO,
+                                                               BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<String> errorMessages = bindingResult.getAllErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errorMessages);
+        }
         Optional<ReservationDTO> responseDTO = reservationService.addFoodToReservation(addFoodDTO);
         return responseDTO.map(reservationDTO -> new ResponseEntity<>(reservationDTO, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));

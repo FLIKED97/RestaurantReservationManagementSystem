@@ -2,7 +2,7 @@ package com.example.RestaurantSystem.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.FutureOrPresent;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -24,12 +24,8 @@ public class Reservation {
     private int id;
 
     @Column(name = "reservation_time")
-    @PastOrPresent(message = "The reservation time date cannot be in the future")
+    @FutureOrPresent(message = "The reservation time date cannot be in the past")
     private Timestamp reservationTime;
-
-
-//    @Column(name = "quantity")
-//    private int quantity;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)

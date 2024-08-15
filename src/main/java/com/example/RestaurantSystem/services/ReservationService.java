@@ -2,11 +2,15 @@ package com.example.RestaurantSystem.services;
 
 import com.example.RestaurantSystem.dto.AddFoodToReservationDTO;
 import com.example.RestaurantSystem.dto.ReservationDTO;
+import com.example.RestaurantSystem.models.Food;
 import com.example.RestaurantSystem.models.Reservation;
 import com.example.RestaurantSystem.models.ReservationFood;
 import com.example.RestaurantSystem.models.RestaurantTable;
 import com.example.RestaurantSystem.repositories.*;
 import com.example.RestaurantSystem.security.PersonDetails;
+import com.example.RestaurantSystem.util.FoodNotFoundException;
+import com.example.RestaurantSystem.util.ReservationNotFound;
+import com.example.RestaurantSystem.util.TableNotFoundException;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.access.AccessDeniedException;
@@ -33,50 +37,50 @@ public class ReservationService {
 
     public Optional<List<ReservationDTO>> getAllReservations() {
         List<Reservation> reservations = reservationRepository.findAll();
+
+        if (reservations.isEmpty()) {
+            throw new ReservationNotFound("No reservations found");
+        }
+
         return Optional.of(reservations.stream()
                 .map(reservation -> modelMapper.map(reservation, ReservationDTO.class))
                 .collect(Collectors.toList()));
     }
 
-    public Optional<ReservationDTO> createReservation(ReservationDTO reservationDTO) {
+    public ReservationDTO createReservation(ReservationDTO reservationDTO) {
 
-        Optional<Reservation> reservationOptional = Optional.ofNullable(modelMapper.map(reservationDTO, Reservation.class));
-        if (reservationOptional.isPresent()) {
+        Reservation reservation = modelMapper.map(reservationDTO, Reservation.class);
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
 
-            Reservation reservation = reservationOptional.get();
             reservation.setCreatedAt(new Date());
             reservation.setPerson(personDetails.getPerson());
-            RestaurantTable restaurantTable = tableRepository.findByNumber(reservation.getRestaurantTable().getNumber());
+            RestaurantTable restaurantTable = tableRepository.findByNumber(reservation.getRestaurantTable().getNumber())
+                    .orElseThrow(() -> new TableNotFoundException("Table with number " + reservation.getRestaurantTable().getNumber() + " not found"));
             reservation.setRestaurantTable(restaurantTable);
             reservationRepository.save(reservation);
-            return Optional.ofNullable(modelMapper.map(reservation, ReservationDTO.class));
-        }
-        return Optional.empty();
+
+            return modelMapper.map(reservation, ReservationDTO.class);
     }
 
-    public Optional<ReservationDTO> changeReservation(ReservationDTO reservationDTO) {
-        Optional<Reservation> reservationOptional = reservationRepository.findById(reservationDTO.getId());
-        if (reservationOptional.isPresent()) {
-            Reservation foundReservation = reservationOptional.get();
-            //foundReservation.setQuantity(reservationDTO.getQuantity());
+    public ReservationDTO changeReservation(ReservationDTO reservationDTO) {
+        Reservation foundReservation = reservationRepository.findById(reservationDTO.getId())
+                .orElseThrow(() -> new ReservationNotFound("Reservation with id" + reservationDTO.getId() + " not found"));
+
             foundReservation.setReservationTime(reservationDTO.getReservationTime());
             foundReservation.setRestaurantTable(foundReservation.getRestaurantTable());
             Reservation updateReservation = reservationRepository.save(foundReservation);
-            return Optional.ofNullable(modelMapper.map(updateReservation, ReservationDTO.class));
-        }
-        return Optional.empty();
+            return modelMapper.map(updateReservation, ReservationDTO.class);
+
     }
 
     public void cancelReservation(int id) {
-        Optional<Reservation> reservationOptional = reservationRepository.findById(id);
+        Reservation reservation = reservationRepository.findById(id)
+                .orElseThrow(() -> new ReservationNotFound("Reservation not found with id " + id));
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
 
-        if (reservationOptional.isPresent()) {
-            Reservation reservation = reservationOptional.get();
             if (reservation.getPerson().getId() == personDetails.getPerson().getId()) {
                 reservation.setStatus(Reservation.Status.CANCELLED);
                 reservationRepository.save(reservation);
@@ -85,47 +89,42 @@ public class ReservationService {
             }  else {
                 throw new AccessDeniedException("Access denied. You cannot cancel reservations you did not create.");
             }
-        } else {
-            throw new NoSuchElementException("Reservation not found with id " + id);
-        }
     }
 
     public void confirmReservation(int id) {
-        Optional<Reservation> reservationOptional = reservationRepository.findById(id);
+        Reservation reservation = reservationRepository.findById(id)
+                .orElseThrow(() -> new ReservationNotFound("Reservation not found with id " + id));
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
 
-        if (reservationOptional.isPresent()) {
-            Reservation reservation = reservationOptional.get();
-            if (reservation.getPerson().getId() == personDetails.getPerson().getId()) {
-                reservation.setStatus(Reservation.Status.CONFIRMED);
-                reservationRepository.save(reservation);
-                emailService.sendSimpleMessage(personDetails.getPerson().getEmail(), "Restaurant System", "Ваше бронювання було підтверджено");
-            } else {
-                throw new AccessDeniedException("Access denied. You cannot confirm reservations you did not create.");
-            }
+        if (reservation.getPerson().getId() == personDetails.getPerson().getId()) {
+            reservation.setStatus(Reservation.Status.CONFIRMED);
+            reservationRepository.save(reservation);
+            emailService.sendSimpleMessage(personDetails.getPerson().getEmail(), "Restaurant System", "Ваше бронювання було підтверджено");
         } else {
-            throw new NoSuchElementException("Reservation not found with id " + id);
+            throw new AccessDeniedException("Access denied. You cannot confirm reservations you did not create.");
         }
     }
+
 
     public Optional<ReservationDTO> addFoodToReservation(AddFoodToReservationDTO addFoodDTO) {
-        Optional<Reservation> reservationOptional = reservationRepository.findById(addFoodDTO.getReservationId());
-        if (reservationOptional.isPresent()) {
-            Reservation reservation = reservationOptional.get();
-            List<ReservationFood> reservationFoods = addFoodDTO.getReservationFoods().stream().map(dto -> {
-                ReservationFood reservationFood = new ReservationFood();
-                reservationFood.setReservation(reservation);
-                reservationFood.setFood(foodRepository.findById(dto.getFoodId())
-                        .orElseThrow(() -> new NoSuchElementException("Food not found")));
-                reservationFood.setQuantity(dto.getQuantity());
-                return reservationFood;
-            }).collect(Collectors.toList());
+        Reservation reservation = reservationRepository.findById(addFoodDTO.getReservationId())
+                .orElseThrow(() -> new ReservationNotFound("Reservation not found with id " + addFoodDTO.getReservationId()));
 
-            reservationFoodRepository.saveAll(reservationFoods);
-            return Optional.ofNullable(modelMapper.map(reservation, ReservationDTO.class));
-        }
-        return Optional.empty();
+        List<ReservationFood> reservationFoods = addFoodDTO.getReservationFoods().stream().map(dto -> {
+            Food food = foodRepository.findById(dto.getFoodId())
+                    .orElseThrow(() -> new FoodNotFoundException("Food not found with id " + dto.getFoodId()));
+
+            ReservationFood reservationFood = new ReservationFood();
+            reservationFood.setReservation(reservation);
+            reservationFood.setFood(food);
+            reservationFood.setQuantity(dto.getQuantity());
+            return reservationFood;
+        }).collect(Collectors.toList());
+
+        reservationFoodRepository.saveAll(reservationFoods);
+        return Optional.ofNullable(modelMapper.map(reservation, ReservationDTO.class));
     }
+
 }
