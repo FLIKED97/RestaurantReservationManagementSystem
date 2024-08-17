@@ -4,18 +4,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import lombok.*;
 
-import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "restaurant_table")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RestaurantTable {
 
     @Id
@@ -25,11 +22,13 @@ public class RestaurantTable {
     @Column(name = "number")
     @NotNull(message = "The number must not be null")
     @Positive(message = "The number must be positive")
+    @NonNull
     private int number;
 
     @Column(name = "seats")
     @NotNull(message = "The seats must not be null")
     @Positive(message = "The seats must be positive")
+    @NonNull
     private int seats;
 
 //    @Column(name = "created_at")

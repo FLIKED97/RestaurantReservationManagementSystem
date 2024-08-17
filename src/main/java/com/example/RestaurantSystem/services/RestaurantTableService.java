@@ -46,14 +46,7 @@ public class RestaurantTableService {
 
 
     public List<RestaurantTableDTO> getAllTable() {
-        return restaurantTableRepository.findAll().stream().map(this::convertToRestaurantTableDTO)
+        return restaurantTableRepository.findAll().stream().map(table -> modelMapper.map(table, RestaurantTableDTO.class))
                 .collect(Collectors.toList());
-    }
-
-    private RestaurantTableDTO convertToRestaurantTableDTO(RestaurantTable restaurantTable){
-        return modelMapper.map(restaurantTable, RestaurantTableDTO.class);
-    }
-    private RestaurantTable convertToRestaurantTable(RestaurantTableDTO restaurantTableDTO){
-        return modelMapper.map(restaurantTableDTO, RestaurantTable.class);
     }
 }
